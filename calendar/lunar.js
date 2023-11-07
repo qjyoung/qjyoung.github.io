@@ -12,10 +12,32 @@ let XXXTens = ['初', '十', '廿', '卅', '　'];
 let XXXWeek = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
 
 let XXXMillisecondsOfAYear = 31556925974.7;
-let XXXSolarTermsInfo = [0, 21208, 42467, 63836, 85337, 107014, 128867, 150921, 173149, 195551, 218072, 240693, 263343, 285989, 308563, 331033, 353350, 375494, 397447, 419210, 440795, 462224, 483532, 504758]
-let XXXSolarTermsInfo2 = []
-XXXSolarTermsInfo.forEach(num => XXXSolarTermsInfo2.push(num * 60000))
-let XXXSolarTerms = ["小寒", "大寒", "立春.", "雨水", "惊蛰", "春分.", "清明*", "谷雨", "立夏.", "小满", "芒种", "夏至.", "小暑", "大暑", "立秋.", "处暑", "白露", "秋分.", "寒露", "霜降", "立冬.", "小雪", "大雪", "冬至."]
+let XXXSolarTerms = [
+  {minutes: 0, term: "小寒"},
+  {minutes: 21208, term: "大寒"},
+  {minutes: 42467, term: "立春."},
+  {minutes: 63836, term: "雨水"},
+  {minutes: 85337, term: "惊蛰"},
+  {minutes: 107014, term: "春分."},
+  {minutes: 128867, term: "清明*"},
+  {minutes: 150921, term: "谷雨"},
+  {minutes: 173149, term: "立夏."},
+  {minutes: 195551, term: "小满"},
+  {minutes: 218072, term: "芒种"},
+  {minutes: 240693, term: "夏至."},
+  {minutes: 263343, term: "小暑"},
+  {minutes: 285989, term: "大暑"},
+  {minutes: 308563, term: "立秋."},
+  {minutes: 331033, term: "处暑"},
+  {minutes: 353350, term: "白露"},
+  {minutes: 375494, term: "秋分."},
+  {minutes: 397447, term: "寒露"},
+  {minutes: 419210, term: "霜降"},
+  {minutes: 440795, term: "立冬."},
+  {minutes: 462224, term: "小雪"},
+  {minutes: 483532, term: "大雪"},
+  {minutes: 504758, term: "冬至."}
+]
 let XXXLunarFestivals = ["0101*春节", "0115 元宵节", "0505*端午节", "0707 七夕", "0815*中秋节", "0909 重阳节", "1208 腊八节", "1223 北小年", "1224 南小年", "1230*除夕"];
 let XXXSolarFestivals = ["0101*元旦", "0214 情人节", "0308 妇女节", "0312 植树节", "0315 消费者权益日", "0401 愚人节", "0501*劳动节", "0504 青年节", "0601 儿童节", "0801 建军节", "0910 教师节", "1001*国庆节", "1225 圣诞节"]
 
@@ -186,11 +208,12 @@ function festivals(lunar) {
   // 节气
   let utc = XXXBaseYearUtc + XXXMillisecondsOfAYear * (lunar.solarYear - XXXBaseYear);
   [lunar.solarMonth * 2 + 1, lunar.solarMonth * 2].forEach(index => {
-    if (new Date(utc + XXXSolarTermsInfo2[index]).getUTCDate() === lunar.solarDay) {
+    let date = new Date(utc + XXXSolarTerms[index].minutes * 60 * 1000);
+    if (date.getFullYear() === lunar.solarYear && date.getMonth() === lunar.solarMonth && date.getDate() === lunar.solarDay) {
       festivals.push({
-        festival: XXXSolarTerms[index],
+        festival: XXXSolarTerms[index].term,
         isLunar: true
-      })
+      });
     }
   })
   return festivals;
